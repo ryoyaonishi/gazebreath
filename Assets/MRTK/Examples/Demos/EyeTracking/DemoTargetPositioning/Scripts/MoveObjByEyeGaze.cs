@@ -49,6 +49,24 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
         [SerializeField]
         private float deltaHandMovemThresh = 0.05f;
 
+        //------------------------------------------------
+        //------------------breath----------------- 
+
+        [Header("Breath")]
+        [Tooltip("Use this to enforce only voice commands to move targets.")]
+        [SerializeField]
+        private bool BreathInputEnabled = true;
+
+        [Tooltip("To control whether the hand motion is used 1:1 to move a target or to use different gains to allow for smaller hand motions.")]
+        [SerializeField]
+        private float breathmapping = 1;
+
+        [Tooltip("Minimal amount of hand movement to trigger target repositioning.")]
+        [SerializeField]
+        private float deltaBreathMovemThresh = 0.05f;
+
+        //--------------------------------------------
+
         [Header("Transitioning")]
         [Tooltip("Transparency of the target itself while dragging is active.")]
         [SerializeField]
@@ -129,6 +147,15 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
 
         private Vector3 initalGazeDir;
         private static bool isManipulatingUsing_Hands = false;
+
+        //---------------------breath---------------------
+        
+        private static bool isManipulatingUsing_Breath = false;
+
+
+
+        //----------------------------------------------
+
         private static bool isManipulatingUsing_Voice = false;
         private Vector3 handPos_absolute;
         private Vector3 handPos_relative;
@@ -235,6 +262,16 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
             {
                 prevPreviewPos = null;
             }
+            if (UnityEngine.Input.GetKeyDown(KeyCode.P))
+            {
+                DragAndDrop_Start();
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.O))
+            {
+                DragAndDrop_Finish();
+            }
+            
         }
 
         #region Voice input handler
@@ -302,6 +339,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
             if (SetActiveHand(eventData.InputSource.SourceName))
             {
                 HandDrag_Start();
+                BreathDrag_Start();
             }
         }
 
@@ -355,6 +393,22 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
                 CoreServices.InputSystem.PushModalInputHandler(gameObject);
             }
         }
+
+
+        //--------------onishiが付け足したコードーーーーーーーーー
+        private void BreathDrag_Start()
+        {
+            if ((BreathInputEnabled) && (!isManipulatingUsing_Breath) && (!isManipulatingUsing_Voice))
+            {
+                isManipulatingUsing_Breath = true;
+
+              
+              
+                DragAndDrop_Start();
+                CoreServices.InputSystem.PushModalInputHandler(gameObject);
+            }
+        }
+
 
         /// <summary>
         /// Finish moving the target using your hands.
