@@ -262,6 +262,8 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
             {
                 prevPreviewPos = null;
             }
+
+            /*
             if (UnityEngine.Input.GetKeyDown(KeyCode.P))
             {
                 DragAndDrop_Start();
@@ -271,6 +273,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
             {
                 DragAndDrop_Finish();
             }
+            */
             
         }
 
