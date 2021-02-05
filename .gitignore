@@ -93,3 +93,10 @@ $RECYCLE.BIN/
 ._*
 .Spotlight-V100
 .Trashes
+
+
+# ============ #
+# MRTK #
+# ============ #
+
+/Assets/MRTK/
