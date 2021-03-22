@@ -555,7 +555,7 @@ MonoBehaviour:
   company: Microsoft
   priority: -100
   required: 0
-  m_remoteHostName: 169.254.147.152
+  m_remoteHostName: 172.16.99.180
   m_remoteHostPort: 8265
   m_maxBitrate: 20000
   m_videoCodec: 0

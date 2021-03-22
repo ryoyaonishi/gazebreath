@@ -19,7 +19,7 @@ public class GetBreath : MonoBehaviour
     {
         var sharedMemory = MemoryMappedFile.OpenExisting("SharedMemory");
 
-       // gazeCubeObj = GameObject.Find("GazeCube");
+        gazeCubeObj = GameObject.Find("GazeCube");
 
         
 
@@ -32,9 +32,9 @@ public class GetBreath : MonoBehaviour
                 using (var accessor = sharedMemory.CreateViewAccessor())
                 {
 
-                    var isSelected = accessor.ReadBoolean(1);
+                    var isSelected = accessor.ReadBoolean(0);
 
-                    //Debug.Log("isSelected  " + isSelected);
+                    Debug.Log("isSelected  " + isSelected);
 
                     breathOn = isSelected;
                     
@@ -62,18 +62,23 @@ public class GetBreath : MonoBehaviour
         isStay = false;
     }
 
+
+    Vector3 Sphere_scale_is_selected = new Vector3(0.25f, 0.25f, 0.25f);
+    Vector3 Sphere_scale_not_selected = new Vector3(0.2f, 0.2f, 0.2f);
+
     // Update is called once per frame
     void Update()
     {
 
-        Debug.Log("Stay is " + isStay);
+        //Debug.Log("Stay is " + isStay);
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            gazeCubeObj = GameObject.Find("GazeCube");
-            Debug.Log(gazeCubeObj);
-        }
-      
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    gazeCubeObj = GameObject.Find("GazeCube");
+        //    Debug.Log(gazeCubeObj);
+        //}
+
+        gazeCubeObj = GameObject.Find("GazeCube");
 
         if (isStay)
         {
@@ -81,14 +86,14 @@ public class GetBreath : MonoBehaviour
             {
                 //Debug.Log("Test");
 
-                gameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+                gameObject.transform.localScale = Sphere_scale_is_selected;
                 this.transform.position = gazeCubeObj.transform.position;
 
 
             }
             else
             {
-                gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                gameObject.transform.localScale = Sphere_scale_not_selected;
             }
         }
 
