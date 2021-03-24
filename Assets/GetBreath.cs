@@ -32,11 +32,16 @@ public class GetBreath : MonoBehaviour
                 using (var accessor = sharedMemory.CreateViewAccessor())
                 {
 
-                    var isSelected = accessor.ReadBoolean(0);
+                    var isSelected = accessor.ReadBoolean(1);
 
                     Debug.Log("isSelected  " + isSelected);
 
                     breathOn = isSelected;
+
+                    var isInhale = accessor.ReadBoolean(0);
+
+                   
+
                     
                 }
 
