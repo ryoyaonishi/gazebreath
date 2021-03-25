@@ -12,7 +12,9 @@ using System;
 public class UIST_UserStudy1 : MonoBehaviour
 {
 
-    public GameObject gazeCubeObj;
+    public GameObject gazeCubeObject;
+
+    public GameObject eyeObject;
 
     public bool isInObject = false;
 
@@ -22,15 +24,20 @@ public class UIST_UserStudy1 : MonoBehaviour
     public bool isLongExhale = false;
     public bool isLongInhale = false;
 
+    [SerializeField]
+    public float velocity = 0.01f;
+
+    public Vector3 objectPosition = new Vector3(0, 0, 0);
+
+   
+
+
     // Start is called before the first frame update
     async void Start()
     {
 
         //呼吸情報を記録しているところにアクセス
         var sharedMemory = MemoryMappedFile.OpenExisting("SharedMemory");
-
-        //視線オブジェクトを取得
-        gazeCubeObj = GameObject.Find("GazeCube");
 
         //呼吸情報を取得
         await Task.Run(() =>
@@ -63,27 +70,35 @@ public class UIST_UserStudy1 : MonoBehaviour
 
             }
         });
+
+        //視線オブジェクトを取得
+        gazeCubeObject = GameObject.Find("GazeCube");
+
+        //このオブジェクトの位置を取得
+        objectPosition = this.gameObject.transform.position;
+
+
+        
     }
 
+    // Update is called once per frame
     void Update()
     {
 
         //gazeCubeObj = GameObject.Find("GazeCube"); //マイフレーム取得する必要ある？
 
-        if (!isInObject)
-        {
-            return;
-        }
+
+
+        //if (!isInObject)
+        //{
+        //    return;
+        //}
 
         if (isShortInhale)
         {
             ClickAction();
             isShortInhale = false;
             Debug.Log("isClicked");
-
-            //gameObject.transform.localScale = Sphere_scale_is_selected;
-            gameObject.GetComponent<Renderer>().material.color = Color.red;
-
 
             isDragModeOn = true;
         }
@@ -93,11 +108,7 @@ public class UIST_UserStudy1 : MonoBehaviour
             isShortExhale = false;
             Debug.Log("isClicked");
 
-            //gameObject.transform.localScale = Sphere_scale_not_selected;
-
             isDragModeOn = false;
-
-            gameObject.GetComponent<Renderer>().material.color = Color.blue;
         }
         else
         {
@@ -106,6 +117,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         if (isLongInhale)
         {
+            Debug.Log("Looooooooooooong Inhale");
             DrawingAction();
         }
         else if (isLongExhale)
@@ -113,11 +125,40 @@ public class UIST_UserStudy1 : MonoBehaviour
             PushingAction();
         }
 
-        ApplicationStudy();
+        //ApplicationStudy();
 
      
 
 
+    }
+
+
+
+    private void ClickAction()
+    { 
+        //視線がオブジェクト内部にあるとき
+        if (isInObject)
+        {
+            gameObject.GetComponent<Renderer>().material.color = Color.red;
+        }
+
+    }
+
+    private void PushingAction()
+    {
+        //TODO: 奥に押し込む
+        if (isInObject) {
+            gameObject.transform.position += new Vector3(0,0,velocity * Time.deltaTime);
+        }
+    }
+
+    private void DrawingAction()
+    {
+        //TODO: 手前に引き寄せる
+        if (isInObject)
+        {
+            gameObject.transform.position -= new Vector3(0, 0, velocity * Time.deltaTime);
+        }
     }
 
     private void ApplicationStudy()
@@ -129,7 +170,7 @@ public class UIST_UserStudy1 : MonoBehaviour
             if (isDragModeOn)
             {
                 gameObject.transform.localScale = Sphere_scale_is_selected;
-                this.transform.position = gazeCubeObj.transform.position;
+                this.transform.position = gazeCubeObject.transform.position;
 
             }
             else
@@ -139,23 +180,7 @@ public class UIST_UserStudy1 : MonoBehaviour
         }
     }
 
-    private void ClickAction()
-    {
-        //TODO: オブジェクトにエフェクトを加える
-        gameObject.transform.localScale = Sphere_scale_is_selected;
-    }
 
-    private void PushingAction()
-    {
-        //TODO: 奥に押し込む
-    }
-
-    private void DrawingAction()
-    {
-        //TODO: 手前に引き寄せる
-    }
-
-  
 
     void OnTriggerEnter(Collider t)
     {
@@ -178,6 +203,6 @@ public class UIST_UserStudy1 : MonoBehaviour
     private bool isMoveModeOn;
     private bool isDragModeOn;
 
-    // Update is called once per frame
+
 
 }
