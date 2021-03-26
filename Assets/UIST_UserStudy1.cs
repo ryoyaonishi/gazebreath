@@ -28,8 +28,8 @@ public class UIST_UserStudy1 : MonoBehaviour
     private StreamWriter writer_for_exp1_breath;
     private StreamWriter writer_for_exp1_dwell;
 
-    private bool isExp_Dwell;
-    private bool isExp_Breath;
+    private bool isExp1_Dwell;
+    private bool isExp1_Breath;
 
     private float exp1_startTime = 0.0f;
 
@@ -95,13 +95,12 @@ public class UIST_UserStudy1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.B))
         {
-            gameObject.GetComponent<Renderer>().material.color = new Color32(0,255,0,50);
+            gameObject.GetComponent<Renderer>().material.color = new Color32(0, 255, 0, 50);
 
-            isExp_Breath = true;
-            isExp_Dwell = false;
+            isExp1_Breath = true;
+            isExp1_Dwell = false;
             writer_for_exp1_breath.WriteLine("Start");
 
             exp1_startTime = Time.time;
@@ -109,48 +108,56 @@ public class UIST_UserStudy1 : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            gameObject.GetComponent<Renderer>().material.color = new Color32(0, 255, 0, 50);
+            gameObject.GetComponent<Renderer>().material.color = new Color32(0, 0, 255, 50);
 
-            isExp_Breath = false;
-            isExp_Dwell = true;
-            
+            isExp1_Breath = false;
+            isExp1_Dwell = true;
+
             writer_for_exp1_dwell.WriteLine("Start");
 
             exp1_startTime = Time.time;
         }
 
+        exp1();
+       
+       //exp2();
 
-        if (isShortInhale)
+        //ApplicationStudy();
+
+
+    }
+
+    private void exp1()
+    {
+    
+
+
+        //if (isShortInhale)
+        //{
+        //    //視線がオブジェクト内部にあるとき
+        //    if (isInObject)
+        //    {
+        //        ClickAction();
+        //        //Debug.Log("isClicked");
+        //        isDragModeOn = true;
+        //    }
+
+        //    isShortInhale = false;
+
+        //}
+        
+        if (isShortExhale)
         {
-            //視線がオブジェクト内部にあるとき
             if (isInObject)
             {
                 ClickAction();
-                Debug.Log("isClicked");
-                isDragModeOn = true;
-            }
-      
-            isShortInhale = false;
-
-        }
-        else if (isShortExhale)
-        {
-            if (isInObject)
-            {
-                ClickAction();
-                Debug.Log("isClicked");
+                //Debug.Log("isClicked");
                 isDragModeOn = false;
             }
 
             isShortExhale = false;
 
         }
-
-       //exp2();
-
-        //ApplicationStudy();
-
-
     }
     
     private void exp2()
@@ -171,6 +178,11 @@ public class UIST_UserStudy1 : MonoBehaviour
             }
 
         }
+        else
+        {
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255,50);
+
+        }
     }
 
 
@@ -185,15 +197,23 @@ public class UIST_UserStudy1 : MonoBehaviour
             writer_for_exp1_breath.WriteLine("Finish");
         }
 
+        
+
+        gameObject.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 50);
+
 
     }
+
+   
 
     private void PushingAction()
     {
         //TODO: 奥に押し込む
-
+        
         gameObject.transform.position += new Vector3(0, 0, velocity * Time.deltaTime);
         gameObject.GetComponent<Renderer>().material.color = Color.red;
+
+        //gazeCubeObject.transform.position = gameObject.transform.position;
 
     }
 
@@ -203,6 +223,9 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         gameObject.transform.position -= new Vector3(0, 0, velocity * Time.deltaTime);
         gameObject.GetComponent<Renderer>().material.color = Color.blue;
+
+
+        //gazeCubeObject.transform.position = gameObject.transform.position;
 
     }
 
@@ -229,7 +252,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
     void OnTriggerEnter(Collider t)
     {
-        if (isExp_Dwell)
+        if (isExp1_Dwell)
         {
             dwell_startTime = Time.time;
 
@@ -242,9 +265,9 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         gameObject.transform.localScale = new Vector3(0.21f, 0.21f, 0.21f);
 
-        Debug.Log(Time.time - dwell_startTime);
+        //Debug.Log(Time.time - dwell_startTime);
 
-        if (isExp_Dwell)
+        if (isExp1_Dwell)
         {
             if (Time.time - dwell_startTime > 0.7f)
             {
@@ -260,7 +283,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
-        if (isExp_Dwell)
+        if (isExp1_Dwell)
         {
             dwell_startTime = 0;
         }
