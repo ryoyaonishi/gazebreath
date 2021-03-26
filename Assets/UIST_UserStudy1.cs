@@ -146,8 +146,17 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         }
 
+       //exp2();
+
+        //ApplicationStudy();
+
+
+    }
+    
+    private void exp2()
+    {
         if (isLongInhale)
-        {          
+        {
             if (isInObject)
             {
                 DrawingAction();
@@ -162,18 +171,13 @@ public class UIST_UserStudy1 : MonoBehaviour
             }
 
         }
-
-        //ApplicationStudy();
-
-
     }
-
 
 
     private void ClickAction()
     {
 
-        gameObject.GetComponent<Renderer>().material.color = Color.red;
+        gameObject.GetComponent<Renderer>().material.color = new Color32(255, 0,0, 50);
 
         if (Time.time > exp1_startTime)
         {
@@ -236,12 +240,13 @@ public class UIST_UserStudy1 : MonoBehaviour
     {
         isInObject = true;
 
-        gameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        gameObject.transform.localScale = new Vector3(0.21f, 0.21f, 0.21f);
 
+        Debug.Log(Time.time - dwell_startTime);
 
         if (isExp_Dwell)
         {
-            if (Time.time - dwell_startTime > 700)
+            if (Time.time - dwell_startTime > 0.7f)
             {
                 ClickAction();
             }
