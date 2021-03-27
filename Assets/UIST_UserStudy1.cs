@@ -29,6 +29,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
     private StreamWriter writer_for_exp1_breath;
     private StreamWriter writer_for_exp1_dwell;
+    private StreamWriter writer_for_detect_exhale;
 
     private bool isExp1_Dwell;
     private bool isExp1_Breath;
@@ -42,16 +43,19 @@ public class UIST_UserStudy1 : MonoBehaviour
 
     private List<int> randomList = new List<int>();
 
+    private int error_times = 0;
+
+    private bool isExperiment = false;
 
 
     // Start is called before the first frame update
-     void Start()
+    void Start()
     {
-        writer_for_exp1_breath = new StreamWriter(@"breath_onishi_01.csv", true, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp1_breath = new StreamWriter(@"breath_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
 
-        writer_for_exp1_dwell = new StreamWriter(@"dwell_onishi_01.csv", true, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp1_dwell = new StreamWriter(@"dwell_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
 
-        
+        writer_for_detect_exhale = new StreamWriter(@"exhale_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
 
 
 
@@ -65,7 +69,7 @@ public class UIST_UserStudy1 : MonoBehaviour
         objectPosition = this.gameObject.transform.position;
 
         //List       
-        
+
         for (int i = 0; i < exp_count_sum; i++)
         {
             randomList.Add(0);
@@ -80,7 +84,7 @@ public class UIST_UserStudy1 : MonoBehaviour
         //åƒãzèÓïÒÇéÊìæ
         GetData(sharedMemory);
 
- 
+
 
     }
 
@@ -106,6 +110,12 @@ public class UIST_UserStudy1 : MonoBehaviour
                     {
                         isShortExhale = accessor.ReadBoolean(2);
                         accessor.Write(2, false);
+
+                        //if (isExperiment)
+                        //{
+                        //    writer_for_detect_exhale.WriteLine(Time.time + ",detectExhale");
+                        //}
+
                     }
 
                     isLongInhale = accessor.ReadBoolean(3);
@@ -115,7 +125,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
                 Thread.Sleep(100);
 
-                
+
 
             }
         });
@@ -123,7 +133,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
     }
 
- 
+
     public List<T> Shuffle<T>(List<T> list)
     {
 
@@ -141,8 +151,11 @@ public class UIST_UserStudy1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+     
+
         if (Input.GetKeyDown(KeyCode.B))
         {
+            //isExperiment = true;
 
             isExp1_Breath = true;
             isExp1_Dwell = false;
@@ -160,6 +173,7 @@ public class UIST_UserStudy1 : MonoBehaviour
             exp1_start(writer_for_exp1_dwell, exp_count_i);
         }
 
+     
         exp1();
 
         //exp2();
@@ -171,10 +185,10 @@ public class UIST_UserStudy1 : MonoBehaviour
 
     public void exp1_start(StreamWriter writer, int i)
     {
-        writer.WriteLine("Start");
+        //writer.WriteLine("Start");
 
         exp1_startTime = Time.time;
-        
+
         //êFÇïœÇ¶ÇÈ
         gameObject.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 100);
 
@@ -185,37 +199,37 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         if (placeNum == 0)
         {
-            this.transform.position = new Vector3(0.2f, 0.1f, 1.1f);
+            this.transform.position = new Vector3(0.18f, 0.1f, 1.1f);
         }
         else if (placeNum == 1)
         {
-            this.transform.position = new Vector3(0.2f, -0.1f, 1.1f);
+            this.transform.position = new Vector3(0.18f, -0.1f, 1.1f);
         }
         else if (placeNum == 2)
         {
-            this.transform.position = new Vector3(-0.2f, 0.1f, 1.1f);
+            this.transform.position = new Vector3(-0.18f, 0.1f, 1.1f);
         }
-        else if(placeNum == 3)
+        else if (placeNum == 3)
         {
-            this.transform.position = new Vector3(-0.2f, -0.1f, 1.1f);
+            this.transform.position = new Vector3(-0.18f, -0.1f, 1.1f);
         }
 
- 
+
         exp_count_i++;
         Debug.Log(exp_count_i);
-        Debug.Log(randomList.Count);
+        //Debug.Log(randomList.Count);
 
-        
-        if(exp_count_i >= randomList.Count)
+
+        if (exp_count_i >= randomList.Count)
         {
-            writer.WriteLine("EXPERIMENT_FINISH");
+            //writer.WriteLine("EXPERIMENT_FINISH");
             Debug.Log("EXPERIMENT 1 FINISHED");
             exp_count_i = 0;
         }
-       
+
     }
 
-   
+
 
 
 
@@ -242,12 +256,16 @@ public class UIST_UserStudy1 : MonoBehaviour
         {
             if (isInObject)
             {
-                if(isExp1_Breath || isExp1_Dwell)
 
-                ClickAction();
+                if (isExp1_Breath)
+                {
+                    ClickAction(writer_for_exp1_breath);
+                }
+
                 //Debug.Log("isClicked");
                 isDragModeOn = false;
             }
+          
 
             isShortExhale = false;
 
@@ -280,21 +298,21 @@ public class UIST_UserStudy1 : MonoBehaviour
     }
 
 
-    private void ClickAction()
+    private void ClickAction(StreamWriter writer)
     {
 
         gameObject.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 0);
 
         if (Time.time > exp1_startTime)
         {
-            writer_for_exp1_breath.WriteLine(Time.time - exp1_startTime);
-            writer_for_exp1_breath.WriteLine("Finish");
-            writer_for_exp1_breath.WriteLine("");
+            writer.WriteLine(Time.time - exp1_startTime);
+            //writer.WriteLine("Finish");
+            writer.WriteLine("");
         }
 
         isExp1_Breath = false;
         isExp1_Dwell = false;
-        
+
     }
 
 
@@ -364,7 +382,7 @@ public class UIST_UserStudy1 : MonoBehaviour
         {
             if (Time.time - dwell_startTime > 0.7f)
             {
-                ClickAction();
+                ClickAction(writer_for_exp1_dwell);
             }
         }
 
@@ -388,12 +406,14 @@ public class UIST_UserStudy1 : MonoBehaviour
     private bool isMoveModeOn;
     private bool isDragModeOn;
     private bool isInTargetObject;
+   
 
     private void OnApplicationQuit()
     {
         writer_for_exp1_breath.Dispose();
-        writer_for_exp1_dwell.Dispose();
-        
-        
+        writer_for_exp1_dwell.Dispose(); 
+        writer_for_detect_exhale.Dispose();
+
+
     }
 }
