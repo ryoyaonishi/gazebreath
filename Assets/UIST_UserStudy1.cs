@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+
 
 public class UIST_UserStudy1 : MonoBehaviour
 {
@@ -35,25 +37,60 @@ public class UIST_UserStudy1 : MonoBehaviour
 
     private float dwell_startTime = 0.0f;
 
-    
+    private int exp_count_sum = 4;
+    private int exp_count_i = 0;
+
+    private List<int> randomList = new List<int>();
+
+
 
     // Start is called before the first frame update
-    async void Start()
+     void Start()
     {
-        writer_for_exp1_breath = new StreamWriter(@"SaveData_onishi_b.csv", true, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp1_breath = new StreamWriter(@"breath_onishi_01.csv", true, Encoding.GetEncoding("Shift_JIS"));
 
-        writer_for_exp1_dwell = new StreamWriter(@"SaveData_onishi_d.csv", true, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp1_dwell = new StreamWriter(@"dwell_onishi_01.csv", true, Encoding.GetEncoding("Shift_JIS"));
+
+        
 
 
 
         //呼吸情報を記録しているところにアクセス
         var sharedMemory = MemoryMappedFile.OpenExisting("SharedMemory");
 
+        //視線オブジェクトを取得
+        gazeCubeObject = GameObject.Find("GazeCube");
+
+        //このオブジェクトの位置を取得
+        objectPosition = this.gameObject.transform.position;
+
+        //List       
+        
+        for (int i = 0; i < exp_count_sum; i++)
+        {
+            randomList.Add(0);
+            randomList.Add(1);
+            randomList.Add(2);
+            randomList.Add(3);
+        }
+
+        Shuffle<int>(randomList);
+
+
         //呼吸情報を取得
+        GetData(sharedMemory);
+
+ 
+
+    }
+
+    async void GetData(MemoryMappedFile sharedMemory)
+    {
         await Task.Run(() =>
         {
             while (true)
             {
+
                 using (var accessor = sharedMemory.CreateViewAccessor())
                 {
 
@@ -76,20 +113,29 @@ public class UIST_UserStudy1 : MonoBehaviour
 
                 }
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
+
+                
 
             }
         });
 
-        //視線オブジェクトを取得
-        gazeCubeObject = GameObject.Find("GazeCube");
 
-        //このオブジェクトの位置を取得
-        objectPosition = this.gameObject.transform.position;
+    }
 
-        
+ 
+    public List<T> Shuffle<T>(List<T> list)
+    {
 
+        for (int i = 0; i < list.Count; i++)
+        {
+            T temp = list[i];
+            int randomIndex = Random.Range(0, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
 
+        return list;
     }
 
     // Update is called once per frame
@@ -97,39 +143,83 @@ public class UIST_UserStudy1 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            gameObject.GetComponent<Renderer>().material.color = new Color32(0, 255, 0, 50);
 
             isExp1_Breath = true;
             isExp1_Dwell = false;
-            writer_for_exp1_breath.WriteLine("Start");
 
-            exp1_startTime = Time.time;
+            exp1_start(writer_for_exp1_breath, exp_count_i);
+
 
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            gameObject.GetComponent<Renderer>().material.color = new Color32(0, 0, 255, 50);
 
             isExp1_Breath = false;
             isExp1_Dwell = true;
 
-            writer_for_exp1_dwell.WriteLine("Start");
-
-            exp1_startTime = Time.time;
+            exp1_start(writer_for_exp1_dwell, exp_count_i);
         }
 
         exp1();
-       
-       //exp2();
+
+        //exp2();
 
         //ApplicationStudy();
 
 
     }
 
+    public void exp1_start(StreamWriter writer, int i)
+    {
+        writer.WriteLine("Start");
+
+        exp1_startTime = Time.time;
+        
+        //色を変える
+        gameObject.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 100);
+
+        //場所を変える
+        var placeNum = randomList[i];
+
+        writer.WriteLine(placeNum);
+
+        if (placeNum == 0)
+        {
+            this.transform.position = new Vector3(0.2f, 0.1f, 1.1f);
+        }
+        else if (placeNum == 1)
+        {
+            this.transform.position = new Vector3(0.2f, -0.1f, 1.1f);
+        }
+        else if (placeNum == 2)
+        {
+            this.transform.position = new Vector3(-0.2f, 0.1f, 1.1f);
+        }
+        else if(placeNum == 3)
+        {
+            this.transform.position = new Vector3(-0.2f, -0.1f, 1.1f);
+        }
+
+ 
+        exp_count_i++;
+
+        
+        if(exp_count_i > randomList.Count)
+        {
+            writer.WriteLine("EXPERIMENT_FINISH");
+            Debug.Log("EXPERIMENT 1 FINISHED");
+            exp_count_i = 0;
+        }
+       
+    }
+
+   
+
+
+
     private void exp1()
     {
-    
+
 
 
         //if (isShortInhale)
@@ -145,11 +235,13 @@ public class UIST_UserStudy1 : MonoBehaviour
         //    isShortInhale = false;
 
         //}
-        
+
         if (isShortExhale)
         {
             if (isInObject)
             {
+                if(isExp1_Breath || isExp1_Dwell)
+
                 ClickAction();
                 //Debug.Log("isClicked");
                 isDragModeOn = false;
@@ -159,7 +251,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
         }
     }
-    
+
     private void exp2()
     {
         if (isLongInhale)
@@ -180,7 +272,7 @@ public class UIST_UserStudy1 : MonoBehaviour
         }
         else
         {
-            gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255,50);
+            gameObject.GetComponent<Renderer>().material.color = new Color(255, 255, 255, 50);
 
         }
     }
@@ -189,27 +281,26 @@ public class UIST_UserStudy1 : MonoBehaviour
     private void ClickAction()
     {
 
-        gameObject.GetComponent<Renderer>().material.color = new Color32(255, 0,0, 50);
+        gameObject.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 0);
 
         if (Time.time > exp1_startTime)
         {
             writer_for_exp1_breath.WriteLine(Time.time - exp1_startTime);
             writer_for_exp1_breath.WriteLine("Finish");
+            writer_for_exp1_breath.WriteLine("");
         }
 
+        isExp1_Breath = false;
+        isExp1_Dwell = false;
         
-
-        gameObject.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 50);
-
-
     }
 
-   
+
 
     private void PushingAction()
     {
         //TODO: 奥に押し込む
-        
+
         gameObject.transform.position += new Vector3(0, 0, velocity * Time.deltaTime);
         gameObject.GetComponent<Renderer>().material.color = Color.red;
 
@@ -263,7 +354,7 @@ public class UIST_UserStudy1 : MonoBehaviour
     {
         isInObject = true;
 
-        gameObject.transform.localScale = new Vector3(0.21f, 0.21f, 0.21f);
+        gameObject.transform.localScale = new Vector3(0.11f, 0.11f, 0.11f);
 
         //Debug.Log(Time.time - dwell_startTime);
 
@@ -274,14 +365,14 @@ public class UIST_UserStudy1 : MonoBehaviour
                 ClickAction();
             }
         }
-        
+
     }
 
     private void OnTriggerExit(Collider other)
     {
         isInObject = false;
 
-        gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
         if (isExp1_Dwell)
         {
@@ -299,5 +390,8 @@ public class UIST_UserStudy1 : MonoBehaviour
     private void OnApplicationQuit()
     {
         writer_for_exp1_breath.Dispose();
+        writer_for_exp1_dwell.Dispose();
+        
+        
     }
 }
