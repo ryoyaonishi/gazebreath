@@ -202,9 +202,11 @@ public class UIST_UserStudy1 : MonoBehaviour
 
  
         exp_count_i++;
+        Debug.Log(exp_count_i);
+        Debug.Log(randomList.Count);
 
         
-        if(exp_count_i > randomList.Count)
+        if(exp_count_i >= randomList.Count)
         {
             writer.WriteLine("EXPERIMENT_FINISH");
             Debug.Log("EXPERIMENT 1 FINISHED");
