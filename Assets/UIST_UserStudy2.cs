@@ -29,7 +29,6 @@ public class UIST_UserStudy2 : MonoBehaviour
 
     private StreamWriter writer_for_exp2;
 
-
     private float exp2_start_time = 0.0f;
 
 
@@ -194,7 +193,6 @@ public class UIST_UserStudy2 : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-
         manipulateObject.transform.localScale = new Vector3(1.1f,1.1f,0.2f);
 
         var z = manipulateObject.transform.localPosition.z;
@@ -204,9 +202,7 @@ public class UIST_UserStudy2 : MonoBehaviour
             if (isLongExhale)
             {
                 manipulateObject.transform.localPosition += new Vector3(0, 0, velocity * Time.deltaTime);
-
             }
-
         }
         else
         {
@@ -215,8 +211,7 @@ public class UIST_UserStudy2 : MonoBehaviour
         }
 
         if(z <= 0.5)
-        {
-      
+        {      
             if (isLongInhale)
             {
                 manipulateObject.transform.localPosition -= new Vector3(0, 0, velocity * Time.deltaTime);
@@ -225,14 +220,11 @@ public class UIST_UserStudy2 : MonoBehaviour
         else
         {
             manipulateObject.transform.localPosition = new Vector3(0, 0, 0.5f);
-
         }
-
-
 
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTribggerExit(Collider other)
     {
 
         manipulateObject.transform.localScale = new Vector3(1,1,0.2f);
@@ -242,7 +234,6 @@ public class UIST_UserStudy2 : MonoBehaviour
     private void OnApplicationQuit()
     {
         writer_for_exp2.Dispose();
-
 
     }
 }
