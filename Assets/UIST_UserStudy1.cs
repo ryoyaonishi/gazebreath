@@ -10,6 +10,12 @@ using UnityEngine;
 public class UIST_UserStudy1 : MonoBehaviour
 {
 
+    [SerializeField]
+    public string name = "";
+
+    [SerializeField]
+    public string times = "";
+
     public GameObject gazeCubeObject;
 
     public GameObject eyeObject;
@@ -22,8 +28,6 @@ public class UIST_UserStudy1 : MonoBehaviour
     public bool isLongExhale = false;
     public bool isLongInhale = false;
 
-    [SerializeField]
-    public float velocity = 0.01f;
 
     public Vector3 objectPosition = new Vector3(0, 0, 0);
 
@@ -51,11 +55,11 @@ public class UIST_UserStudy1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        writer_for_exp1_breath = new StreamWriter(@"breath_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp1_breath = new StreamWriter(@"Study1\breath_" + name + times + ".csv", false, Encoding.GetEncoding("Shift_JIS"));
 
-        writer_for_exp1_dwell = new StreamWriter(@"dwell_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp1_dwell = new StreamWriter(@"Study1\dwell_" + name + times + ".csv" , false, Encoding.GetEncoding("Shift_JIS"));
 
-        writer_for_detect_exhale = new StreamWriter(@"exhale_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
+        //writer_for_detect_exhale = new StreamWriter(@"Study1\exhale_" + name + times + ".csv", false, Encoding.GetEncoding("Shift_JIS"));
 
 
 
@@ -123,7 +127,7 @@ public class UIST_UserStudy1 : MonoBehaviour
 
                 }
 
-                Thread.Sleep(100);
+                Thread.Sleep(10);
 
 
 
@@ -272,30 +276,6 @@ public class UIST_UserStudy1 : MonoBehaviour
         }
     }
 
-    private void exp2()
-    {
-        if (isLongInhale)
-        {
-            if (isInObject)
-            {
-                DrawingAction();
-            }
-
-        }
-        else if (isLongExhale)
-        {
-            if (isInObject)
-            {
-                PushingAction();
-            }
-
-        }
-        else
-        {
-            gameObject.GetComponent<Renderer>().material.color = new Color(255, 255, 255, 50);
-
-        }
-    }
 
 
     private void ClickAction(StreamWriter writer)
@@ -316,29 +296,6 @@ public class UIST_UserStudy1 : MonoBehaviour
     }
 
 
-
-    private void PushingAction()
-    {
-        //TODO: âúÇ…âüÇµçûÇﬁ
-
-        gameObject.transform.position += new Vector3(0, 0, velocity * Time.deltaTime);
-        gameObject.GetComponent<Renderer>().material.color = Color.red;
-
-        //gazeCubeObject.transform.position = gameObject.transform.position;
-
-    }
-
-    private void DrawingAction()
-    {
-        //TODO: éËëOÇ…à¯Ç´äÒÇπÇÈ
-
-        gameObject.transform.position -= new Vector3(0, 0, velocity * Time.deltaTime);
-        gameObject.GetComponent<Renderer>().material.color = Color.blue;
-
-
-        //gazeCubeObject.transform.position = gameObject.transform.position;
-
-    }
 
     private void ApplicationStudy()
     {

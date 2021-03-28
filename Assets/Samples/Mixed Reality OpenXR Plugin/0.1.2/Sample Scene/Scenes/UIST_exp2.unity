@@ -304,8 +304,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 1.1}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.5}
   m_Children:
-  - {fileID: 1655401175}
   - {fileID: 682639640}
+  - {fileID: 1655401175}
   - {fileID: 822460557}
   - {fileID: 1981238411}
   m_Father: {fileID: 0}
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28115ffd1444d854da20e225f1599a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: onishi_
+  name: onishi
   velocity: 0.05
   gazeCubeObject: {fileID: 0}
   manipulateObject: {fileID: 0}
@@ -1656,7 +1656,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 0.2}
   m_Children: []
   m_Father: {fileID: 59041230}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &682639641
 Rigidbody:
@@ -2279,7 +2279,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822460553}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &822460557
 Transform:
   m_ObjectHideFlags: 0
@@ -2289,7 +2289,7 @@ Transform:
   m_GameObject: {fileID: 822460553}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0.25}
-  m_LocalScale: {x: 0.09363363, y: 0.018726725, z: 0.093633614}
+  m_LocalScale: {x: 0.15, y: 0.012, z: 1.2551409}
   m_Children: []
   m_Father: {fileID: 59041230}
   m_RootOrder: 2
@@ -3833,7 +3833,7 @@ Transform:
   m_LocalScale: {x: 0.099999994, y: 0.099999994, z: 1}
   m_Children: []
   m_Father: {fileID: 59041230}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1656381038
 GameObject:
@@ -4372,7 +4372,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1981238407}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1981238411
 Transform:
   m_ObjectHideFlags: 0
@@ -4382,7 +4382,7 @@ Transform:
   m_GameObject: {fileID: 1981238407}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.25}
-  m_LocalScale: {x: 0.07739944, y: 0.015479892, z: 0.077399455}
+  m_LocalScale: {x: 0.15, y: 0.012, z: 1.1938745}
   m_Children: []
   m_Father: {fileID: 59041230}
   m_RootOrder: 3

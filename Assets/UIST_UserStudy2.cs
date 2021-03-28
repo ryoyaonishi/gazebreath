@@ -48,7 +48,7 @@ public class UIST_UserStudy2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var filename = "Exp2" + name + (velocity*1000).ToString() + ".csv";
+        var filename = @"Study2\" + name + (velocity*1000).ToString() + ".csv";
 
         //writer_for_exp2 = new StreamWriter(@"exp2_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
         writer_for_exp2 = new StreamWriter(@filename, false, Encoding.GetEncoding("Shift_JIS"));
@@ -158,14 +158,14 @@ public class UIST_UserStudy2 : MonoBehaviour
         if(0.15 < manipulateObject.transform.localPosition.z && manipulateObject.transform.localPosition.z <= 0.35)
         {
             //注意！exp2_start関数の最後で，isForwardをfalseにしているので，ここでは，isForwardが逆になっているので，これでいい
-            if(isForward)
-            manipulateObject.GetComponent<Renderer>().material.color = new Color(255, 0, 0, 50);
+            if (isForward)
+                manipulateObject.GetComponent<Renderer>().material.color = Color.red;
 
         }
         else if (-0.35 < manipulateObject.transform.localPosition.z && manipulateObject.transform.localPosition.z <= -0.15)
         {
             if(!isForward)
-            manipulateObject.GetComponent<Renderer>().material.color = new Color(255, 0, 0, 50);
+            manipulateObject.GetComponent<Renderer>().material.color = Color.red;
         }
         else
         {
