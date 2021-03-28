@@ -9,10 +9,18 @@ using UnityEngine;
 
 public class UIST_UserStudy2 : MonoBehaviour
 {
+    [SerializeField]
+    public string name = "";
+
+    [SerializeField]
+    public float velocity = 0.01f;
 
     public GameObject gazeCubeObject;
 
     public GameObject manipulateObject;
+
+    public GameObject goalForward;
+    public GameObject goalBackward;
 
     public bool isInObject = false;
 
@@ -22,9 +30,6 @@ public class UIST_UserStudy2 : MonoBehaviour
     public bool isLongExhale = false;
     public bool isLongInhale = false;
 
-    [SerializeField]
-    public float velocity = 0.01f;
-
     public Vector3 objectPosition = new Vector3(0, 0, 0);
 
     private StreamWriter writer_for_exp2;
@@ -32,20 +37,27 @@ public class UIST_UserStudy2 : MonoBehaviour
     private float exp2_start_time = 0.0f;
 
 
-    private int exp_count_sum = 4;
+    private int exp_count_sum = 2;
     private int exp_count_i = 0;
 
     private List<int> randomList = new List<int>();
+    private bool isForward = true;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        writer_for_exp2 = new StreamWriter(@"exp2_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
+        var filename = "Exp2" + name + velocity.ToString() + ".csv";
+
+        //writer_for_exp2 = new StreamWriter(@"exp2_onishi_01.csv", false, Encoding.GetEncoding("Shift_JIS"));
+        writer_for_exp2 = new StreamWriter(@filename, false, Encoding.GetEncoding("Shift_JIS"));
 
         manipulateObject = transform.Find("ManipulatedObject").gameObject;
 
+        goalForward = transform.Find("GoalForward").gameObject;
+
+        goalBackward = transform.Find("GoalBackward").gameObject;
 
         //視線オブジェクトを取得
         gazeCubeObject = GameObject.Find("GazeCube");
@@ -68,6 +80,7 @@ public class UIST_UserStudy2 : MonoBehaviour
         //呼吸情報を取得
         GetData(sharedMemory);
 
+        
 
     }
 
@@ -106,7 +119,7 @@ public class UIST_UserStudy2 : MonoBehaviour
 
                 }
 
-                Thread.Sleep(100);
+                Thread.Sleep(10);
 
 
 
@@ -141,6 +154,25 @@ public class UIST_UserStudy2 : MonoBehaviour
 
         }
 
+        //誤差+-0.05以内なら，赤く点灯
+        if(0.15 < manipulateObject.transform.localPosition.z && manipulateObject.transform.localPosition.z <= 0.35)
+        {
+            if(!isForward)
+            manipulateObject.GetComponent<Renderer>().material.color = new Color(255, 0, 0, 50);
+
+        }
+        else if (-0.35 < manipulateObject.transform.localPosition.z && manipulateObject.transform.localPosition.z <= -0.15)
+        {
+            if(isForward)
+            manipulateObject.GetComponent<Renderer>().material.color = new Color(255, 0, 0, 50);
+        }
+        else
+        {
+            manipulateObject.GetComponent<Renderer>().material.color = new Color(255, 255, 255, 50);
+
+        }
+
+        writer_for_exp2.WriteLine(Time.time + "," + manipulateObject.transform.localPosition.z);
     }
 
     public void exp2_start(StreamWriter writer, int i)
@@ -152,7 +184,7 @@ public class UIST_UserStudy2 : MonoBehaviour
         //場所を変える
         var placeNum = randomList[i];
 
-        writer.WriteLine(placeNum);
+        writer.WriteLine("placeNum," + placeNum);
 
         if (placeNum == 0)
         {
@@ -171,10 +203,28 @@ public class UIST_UserStudy2 : MonoBehaviour
             this.transform.position = new Vector3(-0.18f, -0.1f, 1.1f);
         }
 
+        writer.WriteLine("isForward," + isForward);
+
+        //forwardかbackwartか
+        if (isForward)
+        {
+            goalForward.GetComponent<Renderer>().material.color = new Color(0, 0, 255, 10);
+            goalBackward.GetComponent<Renderer>().material.color = new Color(0, 0, 255, 0);
+            isForward = false;
+        }
+        else
+        {
+            goalForward.GetComponent<Renderer>().material.color = new Color(0, 0, 255, 0);
+            goalBackward.GetComponent<Renderer>().material.color = new Color(0, 0, 255, 10);
+            isForward = true;
+        }
+
 
         exp_count_i++;
         Debug.Log(exp_count_i);
         //Debug.Log(randomList.Count);
+
+        manipulateObject.transform.localPosition = new Vector3(0, 0, 0);
 
 
         if (exp_count_i >= randomList.Count)
