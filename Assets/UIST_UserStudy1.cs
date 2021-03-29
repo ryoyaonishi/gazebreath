@@ -369,7 +369,7 @@ public class UIST_UserStudy1 : MonoBehaviour
     {
         writer_for_exp1_breath.Dispose();
         writer_for_exp1_dwell.Dispose(); 
-        writer_for_detect_exhale.Dispose();
+        //writer_for_detect_exhale.Dispose();
 
 
     }

@@ -43,7 +43,7 @@ public class UIST_UserStudy2 : MonoBehaviour
     private List<int> randomList = new List<int>();
     private bool isForward = true;
 
-
+    private bool isExperiment = false;
 
     // Start is called before the first frame update
     void Start()
@@ -151,7 +151,7 @@ public class UIST_UserStudy2 : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
         {
             exp2_start(writer_for_exp2, exp_count_i);
-
+            isExperiment = true;
         }
 
         //Œë·+-0.05ˆÈ“à‚È‚çCÔ‚­“_“”
@@ -173,7 +173,24 @@ public class UIST_UserStudy2 : MonoBehaviour
 
         }
 
-        writer_for_exp2.WriteLine(Time.time + "," + manipulateObject.transform.localPosition.z);
+        if (isExperiment)
+        {
+            if (Time.time > exp2_start_time)
+            {
+                if (Time.time - exp2_start_time < 10)
+                {
+                    writer_for_exp2.WriteLine(Time.time - exp2_start_time + "," + manipulateObject.transform.localPosition.z);
+
+                }
+                else
+                {
+                    exp2_start(writer_for_exp2, exp_count_i);
+                }
+            }
+        }
+
+     
+
     }
 
     public void exp2_start(StreamWriter writer, int i)
