@@ -385,8 +385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28115ffd1444d854da20e225f1599a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: onishi
-  velocity: 0.05
+  name: tsumoto
+  velocity: 0.03
   gazeCubeObject: {fileID: 0}
   manipulateObject: {fileID: 0}
   goalForward: {fileID: 0}

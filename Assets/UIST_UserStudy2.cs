@@ -184,7 +184,10 @@ public class UIST_UserStudy2 : MonoBehaviour
                 }
                 else
                 {
-                    exp2_start(writer_for_exp2, exp_count_i);
+                    //“K“–‚ÈêŠ‚É’u‚­
+                    this.transform.position = new Vector3(5, 0.1f, 1.1f);
+
+
                 }
             }
         }
