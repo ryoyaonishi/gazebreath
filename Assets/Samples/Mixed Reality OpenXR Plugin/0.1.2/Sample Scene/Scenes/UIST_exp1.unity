@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 945298e109099124ab3fd51dcbf03780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: tsumoto
+  name: test
   times: 1
   gazeCubeObject: {fileID: 0}
   eyeObject: {fileID: 0}
